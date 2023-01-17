@@ -6,6 +6,12 @@ import logging
 import json
 import config
 import os
+from time import sleep
+
+from RPLCD.i2c import CharLCD
+lcd = CharLCD('PCF8574', 0x27)
+lcd.write_string('Start')
+sleep(3)
 
 log = logging.getLogger(__name__)
 
@@ -158,6 +164,10 @@ class TempSensorReal(TempSensor):
                 self.bad_stamp = time.time()
 
             temp = self.thermocouple.get()
+            lcd.write_string('Senor(C): ' + str(int(temp)))
+            sleep(2)
+            lcd.clear()
+
             self.noConnection = self.thermocouple.noConnection
             self.shortToGround = self.thermocouple.shortToGround
             self.shortToVCC = self.thermocouple.shortToVCC
